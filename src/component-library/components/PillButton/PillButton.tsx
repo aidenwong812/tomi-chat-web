@@ -45,7 +45,7 @@ interface PillButtonProps {
 const colorClassMapping = {
   primary: {
     backgroundColor:
-      "bg-[#FF0083] hover:bg-[#FF008326] focus:outline-none focus:ring focus:ring-[#FF0083]",
+      "bg-[#FF0083] hover:bg-[#FF0083CC] focus:outline-none focus:ring focus:ring-[#FF008399]",
     fontColor: "text-white",
   },
   secondary: {

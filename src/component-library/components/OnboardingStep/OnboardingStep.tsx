@@ -1,6 +1,7 @@
 import { useTranslation, Trans } from "react-i18next";
 import { useTheme } from "next-themes";
 import { FaSun, FaMoon } from "react-icons/fa";
+import { Console } from "console";
 import { Spinner } from "../Loaders/Spinner";
 import { ctaStep, stepMapping } from "./stepMapping";
 import { GhostButton } from "../GhostButton/GhostButton";
@@ -76,9 +77,9 @@ export const OnboardingStep = ({
             </button>
           </div>
         </div>
-        <div className="h-[60vh]">
-          {isLoading ? <Spinner /> : null}
-          <div className="max-w-[752px] min-w-[330px] h-[300px] bg-[#FF008326] bg-opacity-15 border-2 rounded-[5%] p-4 px-8 z-50 flex flex-col justify-between items-center mx-4 ">
+        {isLoading ? <Spinner /> : null}
+        <div className="h-[60vh] w-full flex flex-col justify-between items-center">
+          <div className="max-w-[752px] min-w-[330px] h-[300px] bg-[#FF0083] bg-opacity-15 border-[#ff008326] border-2 rounded-[40PX] p-4 px-8 z-20 flex flex-col justify-between items-center mx-4 ">
             <img
               src={
                 theme === "light"
@@ -88,10 +89,7 @@ export const OnboardingStep = ({
               alt="XMTP Logo Mesh"
               className="h-[24%]"
             />
-            {/* <p className="text-3xl pt-3">
-            <span>Tomi </span>
-            <span className="text-[#FF0083]">Mesh</span>
-          </p> */}
+
             <p className="text-xl">Please connect your wallet to begin.</p>
             <div>
               {cta === ctaStep.ENABLE ? (
