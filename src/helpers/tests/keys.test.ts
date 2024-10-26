@@ -1,0 +1,60 @@
+import { expect } from "vitest";
+import { buildLocalStorageKey, loadKeys, storeKeys, wipeKeys } from "../keys";
+
+const localStorageMock = (() => {
+  const store: { [key: string]: string } = {};
+  return {
+    getItem: (key: string): string | undefined => store[key],
+    setItem: (key: string, value: string) => {
+      store[key] = value.toString();
+    },
+    removeItem: (key: string) => {
+      delete store[key];
+    },
+  };
+})();
+
+Object.defineProperty(window, "localStorage", { value: localStorageMock });
+
+describe("buildLocalStorageKey", () => {
+  it("builds correct key based on wallet address", () => {
+    expect(buildLocalStorageKey("test123")).toBe("xmtp:dev:keys:test123");
+  });
+  it("properly handles empty input", () => {
+    expect(buildLocalStorageKey("")).toBe("");
+  });
+});
+
+describe("storeKeys", () => {
+  it("sets wallet address to localStorage", () => {
+    const walletAddress = "testWalletAddress";
+    storeKeys(walletAddress, new Uint8Array(2));
+    expect(JSON.stringify(loadKeys(walletAddress))).toBe(
+      '{"type":"Buffer","data":[0,0]}',
+    );
+  });
+});
+
+describe("loadKeys", () => {
+  it("returns expected value when found in localStorage", () => {
+    const walletAddress = "testWalletAddress";
+    expect(JSON.stringify(loadKeys(walletAddress))).toBe(
+      '{"type":"Buffer","data":[0,0]}',
+    );
+  });
+  it("returns undefined when wallet address exists but key not found in localStorage", () => {
+    const walletAddress = "differentWalletAddress";
+    expect(loadKeys(walletAddress)).toBe(undefined);
+  });
+  it("handles empty input by returning undefined", () => {
+    expect(loadKeys()).toBe(undefined);
+  });
+});
+
+describe("wipeKeys", () => {
+  it("removes address key from local storage", () => {
+    const walletAddress = "testWalletAddress";
+    wipeKeys(walletAddress);
+    expect(loadKeys(walletAddress)).toBe(undefined);
+  });
+});
