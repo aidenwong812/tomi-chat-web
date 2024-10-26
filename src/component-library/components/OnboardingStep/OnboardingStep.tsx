@@ -1,7 +1,6 @@
 import { useTranslation, Trans } from "react-i18next";
 import { useTheme } from "next-themes";
 import { FaSun, FaMoon } from "react-icons/fa";
-import { Console } from "console";
 import { Spinner } from "../Loaders/Spinner";
 import { ctaStep, stepMapping } from "./stepMapping";
 import { GhostButton } from "../GhostButton/GhostButton";
