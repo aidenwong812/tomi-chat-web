@@ -4,7 +4,6 @@ import { FaSun, FaMoon } from "react-icons/fa";
 import { Spinner } from "../Loaders/Spinner";
 import { ctaStep, stepMapping } from "./stepMapping";
 import { GhostButton } from "../GhostButton/GhostButton";
-import { DisconnectIcon } from "../Icons/DisconnectIcon";
 import { PillButton } from "../PillButton/PillButton";
 import logo from "./Assets/logo.png";
 import logoMesh_dark from "./Assets/logoMesh_dark.svg";
@@ -116,7 +115,6 @@ export const OnboardingStep = ({
                 onClick={onDisconnect}
                 label={t("common.disconnect")}
                 variant="secondary"
-                icon={<DisconnectIcon />}
               />
             ) : null}
             {subtext ? (
