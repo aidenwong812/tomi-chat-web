@@ -142,13 +142,13 @@ export const AddressInput = ({
           </div>
         </div>
       </div>
-          <div className="flex justify-end -translate-y-[30%] z-10">
-            <button
-              type="button"
-              className="text-sm text-[#FF0083] text-left px-1 mr-4 w-[178px] h-[34px] bg-white rounded-md dark:border-0 border border-[#FF0083] font-bold">
-              Settings
-            </button>
-          </div>
+      <div className="flex justify-end -translate-y-[30%] z-10">
+        <button
+          type="button"
+          className="text-sm text-[#FF0083] text-left px-1 mr-4 w-[178px] h-[34px] bg-white rounded-md dark:border-0 border border-[#FF0083] font-bold">
+          Settings
+        </button>
+      </div>
     </div>
   );
 };

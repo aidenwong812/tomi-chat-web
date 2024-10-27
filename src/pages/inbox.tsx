@@ -39,7 +39,6 @@ const Inbox: React.FC<{ children?: React.ReactNode }> = () => {
 
   const { loadConsentList } = useConsent();
 
-  
   useEffect(() => {
     if (!client) {
       navigate("/");
@@ -51,8 +50,8 @@ const Inbox: React.FC<{ children?: React.ReactNode }> = () => {
   }, [client]);
 
   const activeTab = useXmtpStore((s) => s.activeTab);
-  const setActiveMessage = useXmtpStore((s) => s.setActiveMessage); 
-  
+  const setActiveMessage = useXmtpStore((s) => s.setActiveMessage);
+
   // const size = useWindowSize();
 
   const loadingConversations = useXmtpStore(
@@ -128,18 +127,18 @@ const Inbox: React.FC<{ children?: React.ReactNode }> = () => {
       onDragEnter={handleDrag}
       onDragLeave={handleDrag}
       onDrop={onAttachmentChange}>
-      <div className={`w-[200%] md:h-full overflow-auto flex md:w-full`}>        
-          <div className="flex flex-1 md:flex-[4]">
-            <div className="xl:flex flex-[1] hidden">
-              <SideNavController />
-            </div>
-            <div className="flex flex-[2] flex-col w-full h-screen overflow-y-auto md:min-w-[350px] bg-white dark:bg-black gap-4 border-x border-[#a2a2a2] dark:border-[#141415]">
-              <HeaderDropdownController />
-              <ConversationListController
-                setStartedFirstMessage={setStartedFirstMessage}
-              />
-            </div>
+      <div className="w-[200%] md:h-full overflow-auto flex md:w-full">
+        <div className="flex flex-1 md:flex-[4]">
+          <div className="xl:flex flex-[1] hidden">
+            <SideNavController />
           </div>
+          <div className="flex flex-[2] flex-col w-full h-screen overflow-y-auto md:min-w-[350px] bg-white dark:bg-black gap-4 border-x border-[#a2a2a2] dark:border-[#141415]">
+            <HeaderDropdownController />
+            <ConversationListController
+              setStartedFirstMessage={setStartedFirstMessage}
+            />
+          </div>
+        </div>
         {
           <div className="flex flex-1 md:flex-[6] w-full flex-col h-screen overflow-hidden">
             {!conversations.length &&
@@ -164,7 +163,7 @@ const Inbox: React.FC<{ children?: React.ReactNode }> = () => {
                     </div>
                   ) : (
                     <>
-                      <div className="flex" data-testid="address-container">                        
+                      <div className="flex" data-testid="address-container">
                         <AddressInputController />
                       </div>
                       <div
@@ -180,8 +179,8 @@ const Inbox: React.FC<{ children?: React.ReactNode }> = () => {
                       </div>
                     </>
                   )}
-                  <button className ="flex md:hidden">
-                    <FiArrowLeft className="size-10 m-4 rounded-full p-2 dark:bg-[#141414] dark:border-black dark:text-white bg-white text-[#FF0083] border border-[#FF0083]"/>
+                  <button type="button" className="flex md:hidden">
+                    <FiArrowLeft className="size-10 m-4 rounded-full p-2 dark:bg-[#141414] dark:border-black dark:text-white bg-white text-[#FF0083] border border-[#FF0083]" />
                   </button>
                   {/* Drag event handling needing for content attachments */}
                   {activeTab === "messages" ? (
