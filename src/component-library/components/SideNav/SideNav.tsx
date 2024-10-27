@@ -64,7 +64,7 @@ const SideNav = ({
 
   const { setTheme } = useTheme();
 
-  const [isOn, setIsOn] = useState(false);
+  const [isOn, setIsOn] = useState(true);
 
   const icons = [
     <img

@@ -18,7 +18,6 @@ import { AddressInputController } from "../controllers/AddressInputController";
 import { HeaderDropdownController } from "../controllers/HeaderDropdownController";
 import { MessageInputController } from "../controllers/MessageInputController";
 import { SideNavController } from "../controllers/SideNavController";
-import { LearnMore } from "../component-library/components/LearnMore/LearnMore";
 import { ConversationListController } from "../controllers/ConversationListController";
 import { useAttachmentChange } from "../hooks/useAttachmentChange";
 import useSelectedConversation from "../hooks/useSelectedConversation";
@@ -144,9 +143,7 @@ const Inbox: React.FC<{ children?: React.ReactNode }> = () => {
             {!conversations.length &&
             !loadingConversations &&
             !startedFirstMessage ? (
-              <LearnMore
-                setStartedFirstMessage={() => setStartedFirstMessage(true)}
-              />
+              <div />
             ) : (
               // Full container including replies
               <div className="flex h-screen">
