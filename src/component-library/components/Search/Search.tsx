@@ -44,7 +44,7 @@ export const Search: React.FC<SearchProps> = ({
       onSubmit={handleSubmit}
       className={classNames("flex w-full", className)}
       data-testid={testId}>
-      <div className="relative flex-grow">
+      <div className="relative flex-grow w-[360px]">
         <input
           type="text"
           className="w-full py-2 pl-10 pr-4 text-sm text-gray-900 bg-white border border-[#FF0083] rounded-md dark:bg-[#353739] dark:text-gray-100 dark:border-gray-700 focus:ring-0"

@@ -10,6 +10,7 @@ import { useDisconnect, useWalletClient } from "wagmi";
 import type { Attachment } from "@xmtp/content-type-remote-attachment";
 import { useNavigate } from "react-router-dom";
 import { XIcon } from "@heroicons/react/outline";
+import { FiArrowLeft } from "react-icons/fi";
 import { useXmtpStore } from "../store/xmtp";
 import { wipeKeys } from "../helpers";
 import { FullConversationController } from "../controllers/FullConversationController";
@@ -38,17 +39,7 @@ const Inbox: React.FC<{ children?: React.ReactNode }> = () => {
 
   const { loadConsentList } = useConsent();
 
-  const [isMobileView, setIsMobileView] = useState(window.innerWidth <= 768);
-
-  useEffect(() => {
-    const handleResize = () => {
-      setIsMobileView(window.innerWidth <= 768);
-    };
-
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
-
+  
   useEffect(() => {
     if (!client) {
       navigate("/");
@@ -60,8 +51,8 @@ const Inbox: React.FC<{ children?: React.ReactNode }> = () => {
   }, [client]);
 
   const activeTab = useXmtpStore((s) => s.activeTab);
-  const setActiveMessage = useXmtpStore((s) => s.setActiveMessage);
-
+  const setActiveMessage = useXmtpStore((s) => s.setActiveMessage); 
+  
   // const size = useWindowSize();
 
   const loadingConversations = useXmtpStore(
@@ -132,15 +123,14 @@ const Inbox: React.FC<{ children?: React.ReactNode }> = () => {
   return (
     // Controller for drag-and-drop area
     <div
-      className={`bg-white dark:bg-black ${isDragActive ? "bg-slate-100" : "bg-white"}`}
+      className={`bg-white dark:bg-black ${isDragActive ? "bg-slate-100" : "bg-white relative"}`}
       onDragOver={handleDrag}
       onDragEnter={handleDrag}
       onDragLeave={handleDrag}
       onDrop={onAttachmentChange}>
-      <div className="w-full md:h-full overflow-auto flex flex-col md:flex-row">
-        {!isMobileView && (
-          <div className="flex flex-[4]">
-            <div className="flex flex-[1]">
+      <div className={`w-[200%] md:h-full overflow-auto flex md:w-full`}>        
+          <div className="flex flex-1 md:flex-[4]">
+            <div className="xl:flex flex-[1] hidden">
               <SideNavController />
             </div>
             <div className="flex flex-[2] flex-col w-full h-screen overflow-y-auto md:min-w-[350px] bg-white dark:bg-black gap-4 border-x border-[#a2a2a2] dark:border-[#141415]">
@@ -150,9 +140,8 @@ const Inbox: React.FC<{ children?: React.ReactNode }> = () => {
               />
             </div>
           </div>
-        )}
         {
-          <div className="flex flex-[6] w-full flex-col h-screen overflow-hidden">
+          <div className="flex flex-1 md:flex-[6] w-full flex-col h-screen overflow-hidden">
             {!conversations.length &&
             !loadingConversations &&
             !startedFirstMessage ? (
@@ -175,7 +164,7 @@ const Inbox: React.FC<{ children?: React.ReactNode }> = () => {
                     </div>
                   ) : (
                     <>
-                      <div className="flex" data-testid="address-container">
+                      <div className="flex" data-testid="address-container">                        
                         <AddressInputController />
                       </div>
                       <div
@@ -191,7 +180,9 @@ const Inbox: React.FC<{ children?: React.ReactNode }> = () => {
                       </div>
                     </>
                   )}
-
+                  <button className ="flex md:hidden">
+                    <FiArrowLeft className="size-10 m-4 rounded-full p-2 dark:bg-[#141414] dark:border-black dark:text-white bg-white text-[#FF0083] border border-[#FF0083]"/>
+                  </button>
                   {/* Drag event handling needing for content attachments */}
                   {activeTab === "messages" ? (
                     <MessageInputController
