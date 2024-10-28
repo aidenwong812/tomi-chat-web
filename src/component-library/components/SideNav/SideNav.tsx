@@ -1,6 +1,13 @@
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useTheme } from "next-themes";
+import {
+  RiMessage3Fill,
+  RiContactsBook2Fill,
+  RiMoonClearFill,
+  RiHomeGearFill,
+} from "react-icons/ri";
+import { FiUsers } from "react-icons/fi";
 import type { ETHAddress } from "../../../helpers";
 import { classNames, shortAddress } from "../../../helpers";
 import { AvatarSideNav } from "../Avatar/Avatar";
@@ -62,38 +69,23 @@ const SideNav = ({
 
   const { t } = useTranslation();
 
-  const { setTheme } = useTheme();
+  const { theme, setTheme } = useTheme();
 
-  const [isOn, setIsOn] = useState(false);
+  const [isOn, setIsOn] = useState(theme !== "dark");
 
   const icons = [
-    <img
-      src={!isOn ? "/icon/chats.svg" : "/icon/chats_white.svg"}
-      alt="contacts"
+    <RiMessage3Fill
       key="Chats"
-      className="mr-4 dark:fill-white fill-black"
-      data-testid="Chats-icon"
+      className="mr-4 dark:fill-white fill-black size-6"
     />,
-    <img
-      src={!isOn ? "/icon/rooms.svg" : "/icon/rooms_white.svg"}
-      alt="contacts"
-      key="Rooms"
-      className="mr-4"
-      data-testid="Rooms-icon"
+    <FiUsers key="Users" className="mr-4 dark:fill-white fill-black size-6" />,
+    <RiContactsBook2Fill
+      key="Contacs"
+      className="mr-4 dark:fill-white fill-black size-6"
     />,
-    <img
-      src={!isOn ? "/icon/contacts.svg" : "/icon/contacts_white.svg"}
-      alt="contacts"
-      key="Contacts"
-      className="mr-4"
-      data-testid="Contacts-icon"
-    />,
-    <img
-      src={!isOn ? "/icon/settings.svg" : "/icon/settings_white.svg"}
-      alt="contacts"
+    <RiHomeGearFill
       key="Settings"
-      className="mr-4"
-      data-testid="Settingd-icon"
+      className="mr-4 dark:fill-white fill-black size-6"
     />,
   ];
   const [currentIcon, setCurrentIcon] = useState(icons[0].key);
@@ -144,8 +136,8 @@ const SideNav = ({
         "h-screen",
         "bg-transparent",
         "px-6",
-        "shadow-lg text-black dark:text-white",
-        "absolute w-[80vw] lg:w-full lg:relative z-50",
+        "text-black dark:text-white",
+        "absolute lg:w-full lg:relative z-50",
       )}>
       <div className="flex flex-col items-start space-y-4 w-full">
         <div className="py-4 flex w-full">
@@ -199,18 +191,12 @@ const SideNav = ({
                     "cursor-pointer",
                     "gap-3",
                   )}>
-                  <img
-                    src={
-                      !isOn
-                        ? "/icon/nightmode.svg"
-                        : "/icon/nightmode_white.svg"
-                    }
-                    alt="contacts"
-                    key="nightmode"
-                    data-testid="Settingd-icon"
+                  <RiMoonClearFill
+                    key="NightMode"
+                    className="dark:fill-white fill-black size-10 -mt-2"
                   />
                   <div className="w-full">
-                    {`${isOn ? "Light" : "Night"} Mode`}
+                    {`${isOn ? "Light" : "Night"}mode`}
                   </div>
                   <div>
                     <ToggleButton
