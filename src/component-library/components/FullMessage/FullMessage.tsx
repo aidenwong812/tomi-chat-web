@@ -161,7 +161,8 @@ export const FullMessage = ({
         )}
         onMouseOut={() => setOnHover(false)}
         onBlur={() => setOnHover(false)}>
-        <div className={classNames("flex flex-col w-full gap-1", alignmentStyles)}>
+        <div
+          className={classNames("flex flex-col w-full gap-1", alignmentStyles)}>
           <div
             className={classNames(onHover ? "opacity-1" : "opacity-0")}
             onMouseOver={() => setOnHover(true)}
