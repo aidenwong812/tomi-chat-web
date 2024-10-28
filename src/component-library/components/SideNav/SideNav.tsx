@@ -76,16 +76,19 @@ const SideNav = ({
   const icons = [
     <RiMessage3Fill
       key="Chats"
-      className="mr-4 dark:fill-white fill-black size-6"
+      className="mr-4 dark:fill-[#d3d3d3] fill-[#111111] size-6"
     />,
-    <FiUsers key="Users" className="mr-4 dark:fill-white fill-black size-6" />,
+    <FiUsers
+      key="Users"
+      className="mr-4 dark:fill-[#d3d3d3] fill-[#111111] size-6"
+    />,
     <RiContactsBook2Fill
       key="Contacs"
-      className="mr-4 dark:fill-white fill-black size-6"
+      className="mr-4 dark:fill-[#d3d3d3] fill-[#111111] size-6"
     />,
     <RiHomeGearFill
       key="Settings"
-      className="mr-4 dark:fill-white fill-black size-6"
+      className="mr-4 dark:fill-[#d3d3d3] fill-[#111111] size-6"
     />,
   ];
   const [currentIcon, setCurrentIcon] = useState(icons[0].key);
@@ -101,8 +104,6 @@ const SideNav = ({
         className={classNames(
           "p-2",
           "pr-8",
-          "hover:dark:text-white hover:text-gray-500",
-          "dark:text-gray-500 text-black",
           "rounded-lg",
           "w-full",
           "flex",
@@ -117,7 +118,7 @@ const SideNav = ({
             "flex items-center h-fit w-full",
             currentIcon === icn.key ||
               (!currentIcon && icons[1].key === icn.key)
-              ? "font-bold bg-[#FF0083] rounded-r-full rounded-bl-full py-3 px-5 text-white"
+              ? "font-bold bg-[#FF0083] opacity-75 rounded-r-full rounded-bl-full py-3 px-5 text-white"
               : "",
           )}>
           {icn}
@@ -181,8 +182,7 @@ const SideNav = ({
                   className={classNames(
                     "p-2",
                     "pr-8",
-                    "hover:dark:text-white hover:text-gray-500",
-                    "dark:text-gray-500 text-black",
+                    "dark:text-[#d3d3d3] text-[#111111]",
                     "rounded-lg",
                     "flex",
                     "item-center",

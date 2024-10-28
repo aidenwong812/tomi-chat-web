@@ -133,7 +133,7 @@ export const MessagePreviewCard = ({
         <div
           className={classNames(
             "text-xs",
-            "text-[#a2a2a2]",
+            isSelected ? "text-white" : "text-[#a2a2a2]",
             "w-1/3",
             "text-right",
             "ml-4",
@@ -143,7 +143,7 @@ export const MessagePreviewCard = ({
           {activeTab === "blocked" ? (
             <button
               type="button"
-              className="text-indigo-600 font-bold text-md"
+              className=" font-bold text-md"
               onClick={() => {
                 void allow([address]);
                 setActiveTab("messages");
