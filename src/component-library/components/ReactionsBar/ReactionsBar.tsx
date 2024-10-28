@@ -47,8 +47,10 @@ export const ReactionsBar: React.FC<ReactionsBarProps> = ({
   );
 
   return (
-    <div className="flex items-center gap-1">
-      <div className={styles.wrapper} data-testid="reactions-bar">
+    <div className="flex items-center gap-1 ">
+      <div
+        className="border border-[#FF0083] rounded-lg flex gap-1"
+        data-testid="reactions-bar">
         {availableReactionEmojis.map((emoji) => (
           <button
             type="button"
@@ -62,7 +64,7 @@ export const ReactionsBar: React.FC<ReactionsBarProps> = ({
       </div>
       {!activeMessage ? (
         <button
-          className="bg-gray-100 p-1 px-2 rounded-lg"
+          className="border border-[#FF0083] p-1 px-2 rounded-lg"
           data-testid="reply-icon"
           onClick={() => {
             setActiveMessage(message);

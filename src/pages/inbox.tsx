@@ -30,7 +30,7 @@ const Inbox: React.FC<{ children?: React.ReactNode }> = () => {
   const activeMessage = useXmtpStore((state) => state.activeMessage);
 
   const { client, disconnect } = useClient();
-  const [isDragActive, setIsDragActive] = useState(false);
+  const [isDragActive, setIsDragActive] = useState(true);
   const { conversations } = useConversations();
   const selectedConversation = useSelectedConversation();
   const { data: walletClient } = useWalletClient();
@@ -64,6 +64,7 @@ const Inbox: React.FC<{ children?: React.ReactNode }> = () => {
   );
 
   const { disconnect: disconnectWagmi, reset: resetWagmi } = useDisconnect();
+  const [isConversationListOpen, setIsConversationListOpen] = useState(false);
 
   const [attachmentPreview, setAttachmentPreview]: [
     string | undefined,
@@ -80,6 +81,10 @@ const Inbox: React.FC<{ children?: React.ReactNode }> = () => {
     setAttachmentPreview,
     setIsDragActive,
   });
+
+  useEffect(() => {
+    setIsConversationListOpen(false);
+  }, [selectedConversation]);
 
   // if the wallet address changes, disconnect the XMTP client
   useEffect(() => {
@@ -126,9 +131,10 @@ const Inbox: React.FC<{ children?: React.ReactNode }> = () => {
       onDragEnter={handleDrag}
       onDragLeave={handleDrag}
       onDrop={onAttachmentChange}>
-      <div className="w-[200%] md:h-full overflow-auto flex md:w-full">
-        <div className="flex flex-1 md:flex-[4]">
-          <div className="xl:flex flex-[1] hidden">
+      <div className="w-[100%] md:h-full overflow-auto flex md:w-full">
+        <div
+          className={`${isConversationListOpen ? "flex" : "hidden"} md:flex flex-1 md:flex-[4]`}>
+          <div className="xl:flex flex-[1] hidden w-[320px]">
             <SideNavController />
           </div>
           <div className="flex flex-[2] flex-col w-full h-screen overflow-y-auto md:min-w-[350px] bg-white dark:bg-black gap-4 border-x border-[#a2a2a2] dark:border-[#141415]">
@@ -139,7 +145,8 @@ const Inbox: React.FC<{ children?: React.ReactNode }> = () => {
           </div>
         </div>
         {
-          <div className="flex flex-1 md:flex-[6] w-full flex-col h-screen overflow-hidden">
+          <div
+            className={`${!isConversationListOpen ? "flex" : "hidden"} flex-1 md:flex-[6] w-full flex-col h-screen overflow-hidden`}>
             {!conversations.length &&
             !loadingConversations &&
             !startedFirstMessage ? (
@@ -176,10 +183,12 @@ const Inbox: React.FC<{ children?: React.ReactNode }> = () => {
                       </div>
                     </>
                   )}
-                  <button type="button" className="flex md:hidden">
+                  <button
+                    type="button"
+                    className="flex md:hidden"
+                    onClick={() => setIsConversationListOpen(true)}>
                     <FiArrowLeft className="size-10 m-4 rounded-full p-2 dark:bg-[#141414] dark:border-black dark:text-white bg-white text-[#FF0083] border border-[#FF0083]" />
                   </button>
-                  {/* Drag event handling needing for content attachments */}
                   {activeTab === "messages" ? (
                     <MessageInputController
                       attachment={attachment}
