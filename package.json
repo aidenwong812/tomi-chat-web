@@ -56,6 +56,7 @@
     "interweave": "^13.1.0",
     "interweave-autolink": "^5.1.0",
     "interweave-emoji": "^7.0.0",
+    "ipfs-http-client": "^60.0.1",
     "lodash": "^4.17.21",
     "next-themes": "^0.3.0",
     "react": "18.2.0",
