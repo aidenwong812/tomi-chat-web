@@ -66,6 +66,8 @@ const Inbox: React.FC<{ children?: React.ReactNode }> = () => {
   const { disconnect: disconnectWagmi, reset: resetWagmi } = useDisconnect();
   const [isConversationListOpen, setIsConversationListOpen] = useState(false);
 
+  const [isCreateChatRoom, setIsCreateChatRoom] = useState(false);
+
   const [attachmentPreview, setAttachmentPreview]: [
     string | undefined,
     (url: string | undefined) => void,
@@ -139,6 +141,17 @@ const Inbox: React.FC<{ children?: React.ReactNode }> = () => {
           </div>
           <div className="flex flex-[2] flex-col w-full h-screen overflow-y-auto md:min-w-[350px] bg-white dark:bg-black gap-4 border-x border-[#a2a2a2] dark:border-[#141415]">
             <HeaderDropdownController />
+            <div className="flex justify-center">
+              <button
+                type="button"
+                className="rounded-full dark:bg-[#111111] hover:bg-[#FF0083] hover:text-white dark:hover:bg-[#FF0083] 
+                  dark:hover:text-white duration-300 bg-white text-black border border-[#FF0083] dark:text-white p-2 w-1/2"
+                onClick={() => {
+                  setIsCreateChatRoom(!isCreateChatRoom);
+                }}>
+                Create Chat Room
+              </button>
+            </div>
             <ConversationListController
               setStartedFirstMessage={setStartedFirstMessage}
             />

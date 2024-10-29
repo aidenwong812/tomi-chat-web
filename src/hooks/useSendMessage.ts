@@ -45,6 +45,7 @@ const useSendMessage = (
         const space = await client.addSpace(proof);
 
         await client.setCurrentSpace(space.did());
+        // const client = await Client.create();
 
         const encryptedEncoded = await RemoteAttachmentCodec.encodeEncrypted(
           attachment,

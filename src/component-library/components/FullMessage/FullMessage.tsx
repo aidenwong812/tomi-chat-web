@@ -52,9 +52,9 @@ type FullMessageProps = PropsWithChildren & {
 };
 
 const incomingMessageBackgroundStyles =
-  "rounded-[0px_20px_20px_20px] bg-[#FF0083] text-white";
+  "rounded-[0px_20px_20px_20px] bg-[#FF0083] bg-opacity-20 dark:bg-opacity-50 text-black dark:text-white";
 const outgoingMessageBackgroundStyles =
-  "rounded-[20px_20px_0_20px] bg-white dark:bg-gray-800 text-gray-900 dark:text-white";
+  "rounded-[20px_20px_0_20px] bg-white dark:bg-[#111111] text-gray-900 dark:text-white border border-[#111111] border-opacity-50 dark:border-[#FF0083] dark:border-opacity-100";
 const errorMessageBackgroundStyles =
   "bg-white rounded-bl-lg pl-2 border-gray-200 border";
 
@@ -179,10 +179,7 @@ export const FullMessage = ({
               role="button"
               tabIndex={0}
               onKeyDown={() => setOnHover(true)}
-              className={classNames(
-                "max-w-full p-3 border border-[#FF0083]",
-                messageBackgroundStyles,
-              )}
+              className={classNames("max-w-full p-3", messageBackgroundStyles)}
               onMouseOver={() => setOnHover(true)}
               onFocus={() => setOnHover(true)}>
               {children}

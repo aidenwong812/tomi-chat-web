@@ -43,7 +43,8 @@ export const ToggleButton: React.FC<ToggleButtonProps> = ({
       type="button"
       onClick={onToggle}
       className={classNames(
-        "relative inline-flex flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent bg-[#bdbdbd] transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2",
+        "relative inline-flex flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none",
+        isOn ? "bg-[#111111]" : "bg-[#d3d3d3]",
         sizeClasses[size],
       )}
       data-testid={testId}>
