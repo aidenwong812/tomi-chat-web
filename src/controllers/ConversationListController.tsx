@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { useConsent } from "@xmtp/react-sdk";
+import { useConsent, useDb } from "@xmtp/react-sdk";
 import type { CachedConversation } from "@xmtp/react-sdk";
 import { useWalletClient } from "wagmi";
 import { useXmtpStore } from "../store/xmtp";
@@ -9,45 +9,61 @@ import { MessagePreviewCardController } from "./MessagePreviewCardController";
 import useStreamAllMessages from "../hooks/useStreamAllMessages";
 import { groupsService } from "../../services/groups";
 import CreateButton from "../component-library/components/CreateButton/CreateButton";
+import { updateConversationIdentities } from "../helpers/conversation";
 
 interface ChatRoom {
   group_id: string;
   users: string[];
 }
 
-interface ConversationListControllerProps {
-  setStartedFirstMessage: (value: boolean) => void;
+type ConversationListControllerProps = {
+  setStartedFirstMessage: (startedFirstMessage: boolean) => void;
   selectedRoom: string;
   setSelectedRoom: (value: string) => void;
   setSelectedRoomMembers: (value: string[]) => void;
   selectedSideNav: string;
-}
+};
 
-export const ConversationListController: React.FC<
-  ConversationListControllerProps
-> = ({
+export const ConversationListController = ({
   setStartedFirstMessage,
   selectedRoom,
   setSelectedRoom,
   setSelectedRoomMembers,
   selectedSideNav,
-}) => {
+}: ConversationListControllerProps) => {
   const [activeConversations, setActiveConversations] = useState<
     CachedConversation[]
   >([]);
+
   const { data: walletClient } = useWalletClient();
 
   const [users, setUsers] = useState<string[]>(
     [walletClient?.account.address].filter(Boolean) as string[],
   );
-  const { isLoading, conversations } = useListConversations();
+
+  const { isLoaded, isLoading, conversations } = useListConversations();
   const { isAllowed, isDenied, consentState } = useConsent();
+
+  const recipientAddress = useXmtpStore((s) => s.recipientAddress);
+
+  const { db } = useDb();
+
   const [chatRooms, setChatRooms] = useState<ChatRoom[]>([]);
   const [isCreateChatRoom, setIsCreateChatRoom] = useState(false);
 
   useStreamAllMessages();
   const recipientInput = useXmtpStore((s) => s.recipientInput);
   const activeTab = useXmtpStore((s) => s.activeTab);
+
+  // when the conversations are loaded, update their identities
+  useEffect(() => {
+    const runUpdate = async () => {
+      if (isLoaded) {
+        await updateConversationIdentities(activeConversations, db);
+      }
+    };
+    void runUpdate();
+  }, [activeConversations, db, isLoaded]);
 
   useEffect(() => {
     const fetchGroups = async () => {
@@ -64,6 +80,15 @@ export const ConversationListController: React.FC<
 
     void fetchGroups();
   }, [isCreateChatRoom, walletClient?.account.address]);
+
+  useEffect(() => {
+    if (isCreateChatRoom && recipientAddress) {
+      const updatedUsers = users.includes(recipientAddress)
+        ? users.filter((user) => user !== recipientAddress)
+        : [...users, recipientAddress];
+      setUsers(updatedUsers);
+    }
+  }, [isCreateChatRoom, recipientAddress, users]);
 
   useEffect(() => {
     const createGroup = async () => {
@@ -131,42 +156,47 @@ export const ConversationListController: React.FC<
     setSelectedRoomMembers(room.users);
   };
 
-  return (
-    <div className="w-full">
-      {selectedSideNav === "Rooms" ? (
-        <div className="space-y-4">
-          <h2 className="text-2xl mt-4 font-bold text-center">Rooms</h2>
-          <CreateButton
-            isCreateChatRoom={isCreateChatRoom}
-            setIsCreateChatRoom={setIsCreateChatRoom}
-          />
-          {!isCreateChatRoom && (
-            <div className="space-y-2">
-              {chatRooms.map((room: ChatRoom) => (
-                <button
-                  key={room.group_id}
-                  className={`w-full p-4 rounded-lg transition-colors ${
-                    selectedRoom === room.group_id
-                      ? "bg-primary text-white"
-                      : "bg-background hover:bg-secondary"
-                  }`}
-                  onClick={() => handleRoomClick(room)}
-                  type="button">
-                  <span>Room ID: {room.group_id}</span>
-                  <span className="block">Members: {room.users.length}</span>
-                </button>
-              ))}
-            </div>
-          )}
+  return selectedSideNav !== "Rooms" ? (
+    <ConversationList
+      hasRecipientEnteredValue={!!recipientInput}
+      setStartedFirstMessage={() => setStartedFirstMessage(true)}
+      isLoading={isLoading}
+      messages={messagesToPass}
+      activeTab={activeTab}
+    />
+  ) : (
+    <div className="space-y-4 h-screen">
+      <h2 className="text-2xl mt-4 font-bold text-center">Rooms</h2>
+      <CreateButton
+        isCreateChatRoom={isCreateChatRoom}
+        setIsCreateChatRoom={setIsCreateChatRoom}
+      />
+      {isCreateChatRoom ? (
+        <div className="h-full">
+          {activeConversations.map((conversation: CachedConversation) => (
+            <MessagePreviewCardController
+              key={conversation.topic}
+              convo={conversation}
+            />
+          ))}
         </div>
       ) : (
-        <ConversationList
-          hasRecipientEnteredValue={Boolean(recipientInput)}
-          setStartedFirstMessage={() => setStartedFirstMessage(true)}
-          isLoading={isLoading}
-          messages={messagesToPass}
-          activeTab={activeTab}
-        />
+        <div className="flex flex-col gap-4 mx-4">
+          {chatRooms.map((room: ChatRoom) => (
+            <button
+              key={room.group_id}
+              className={` tex-left p-4 w-full rounded-xl border border-[#FF0083] dark:border-[#000000]  ${
+                selectedRoom === room.group_id
+                  ? "text-white bg-[#FF0083] opacity-70 "
+                  : "hover:bg-secondary dark:bg-[#141414]"
+              }`}
+              onClick={() => handleRoomClick(room)}
+              type="button">
+              <span>Room ID: {room.group_id}</span>
+              <span className="block">Members: {room.users.length}</span>
+            </button>
+          ))}
+        </div>
       )}
     </div>
   );
