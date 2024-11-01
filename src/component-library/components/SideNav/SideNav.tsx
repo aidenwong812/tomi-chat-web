@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useTheme } from "next-themes";
+import type { Dispatch, SetStateAction } from "react";
 import {
   RiMessage3Fill,
   RiContactsBook2Fill,
@@ -35,6 +36,8 @@ interface SideNavProps {
    * What should happen when disconnect is clicked?
    */
   onDisconnect?: () => void;
+  selectedSideNav: string;
+  setSelectedSideNav: Dispatch<SetStateAction<string>>;
 }
 
 // type Lang = {
@@ -48,6 +51,8 @@ const SideNav = ({
   walletAddress,
   avatarUrl,
   onDisconnect,
+  selectedSideNav,
+  setSelectedSideNav,
 }: SideNavProps) => {
   // const [mappedLangs, setMappedLangs] = useState<Lang[]>([]);
   // When language changes, change the modal text to render the corresponding locale selector within that language
@@ -79,11 +84,11 @@ const SideNav = ({
       className="mr-4 dark:fill-[#d3d3d3] fill-[#111111] size-6"
     />,
     <FiUsers
-      key="Users"
+      key="Rooms"
       className="mr-4 dark:fill-[#d3d3d3] fill-[#111111] size-6"
     />,
     <RiContactsBook2Fill
-      key="Contacs"
+      key="Contacts"
       className="mr-4 dark:fill-[#d3d3d3] fill-[#111111] size-6"
     />,
     <RiHomeGearFill
@@ -91,14 +96,13 @@ const SideNav = ({
       className="mr-4 dark:fill-[#d3d3d3] fill-[#111111] size-6"
     />,
   ];
-  const [currentIcon, setCurrentIcon] = useState(icons[0].key);
 
   const mappedButtons = icons.map((icn) => (
     <div className="group flex relative w-full" key={icn.key}>
       <button
         type="button"
         onClick={(event) => {
-          setCurrentIcon((event.target as HTMLElement).innerText);
+          setSelectedSideNav((event.target as HTMLElement).innerText);
         }}
         aria-label={icn.key as string}
         className={classNames(
@@ -116,8 +120,8 @@ const SideNav = ({
         <div
           className={classNames(
             "flex items-center h-fit w-full",
-            currentIcon === icn.key ||
-              (!currentIcon && icons[1].key === icn.key)
+            selectedSideNav === icn.key ||
+              (!selectedSideNav && icons[1].key === icn.key)
               ? "font-bold bg-[#FF0083] opacity-75 rounded-r-full rounded-bl-full py-3 px-5 text-white"
               : "",
           )}>

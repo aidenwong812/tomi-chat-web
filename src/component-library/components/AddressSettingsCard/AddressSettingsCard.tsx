@@ -37,7 +37,7 @@ export const AddressSettingsCard = ({
   isConnected = false,
   isLoading = false,
 }: AddressSettingsCardProps) => (
-  <div className="max-w-full bg-gray-50 flex p-2 flex items-center justify-between">
+  <div className="max-w-full bg-gray-50 p-2 flex items-center justify-between">
     <div className="flex items-center">
       {avatar}
       <div className="flex flex-col">

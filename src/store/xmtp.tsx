@@ -39,6 +39,20 @@ interface XmtpState {
   setActiveMessage: (message?: CachedMessageWithId) => void;
   activeTab: ActiveTab;
   setActiveTab: (activeTab: ActiveTab) => void;
+  chatRooms:
+    | {
+        group_id: string;
+        users: string[];
+      }[]
+    | null;
+  setChatRooms: (
+    chatRooms:
+      | {
+          group_id: string;
+          users: string[];
+        }[]
+      | null,
+  ) => void;
   changedConsentCount: number;
   setChangedConsentCount: (changedConsentCount: number) => void;
 }
@@ -67,6 +81,8 @@ export const useXmtpStore = create<XmtpState>((set) => ({
   conversationTopic: "",
   setConversationTopic: (conversationTopic) =>
     set(() => ({ conversationTopic })),
+  chatRooms: null,
+  setChatRooms: (chatRooms) => set(() => ({ chatRooms })),
   resetXmtpState: () =>
     set(() => ({
       client: undefined,

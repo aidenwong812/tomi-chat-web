@@ -1,7 +1,10 @@
 import { ENVIRONMENT } from "./constants";
 
 export const getEnv = (): "dev" | "production" | "local" => {
-  const envVar = import.meta.env.VITE_XMTP_ENVIRONMENT;
+  const envVar = import.meta.env.VITE_XMTP_ENVIRONMENT as
+    | "production"
+    | "local"
+    | undefined;
   if (envVar === "production") {
     return envVar;
   }

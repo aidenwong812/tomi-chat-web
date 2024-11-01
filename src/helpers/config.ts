@@ -41,11 +41,11 @@ const transports = {
     ),
     http(),
   ]),
-};
+} as const;
 
-let config: Config;
+let config: Config | undefined;
 
-export const getWagmiConfig = () => {
+export const getWagmiConfig = (): Config => {
   if (!config) {
     if (isAppEnvDemo()) {
       config = createConfig({

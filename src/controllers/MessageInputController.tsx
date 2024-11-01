@@ -11,6 +11,7 @@ interface MessageInputControllerProps {
   setAttachment: (attachment: Attachment | undefined) => void;
   setAttachmentPreview: (url: string | undefined) => void;
   setIsDragActive: (status: boolean) => void;
+  selectedRoomMembers: string[];
 }
 
 export const MessageInputController = ({
@@ -19,6 +20,7 @@ export const MessageInputController = ({
   attachmentPreview,
   setAttachmentPreview,
   setIsDragActive,
+  selectedRoomMembers,
 }: MessageInputControllerProps) => {
   // XMTP Hooks
   const conversation = useSelectedConversation();
@@ -45,6 +47,7 @@ export const MessageInputController = ({
       attachmentPreview={attachmentPreview}
       setAttachmentPreview={setAttachmentPreview}
       setIsDragActive={setIsDragActive}
+      selectedRoomMembers={selectedRoomMembers}
     />
   );
 };
