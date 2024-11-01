@@ -31,8 +31,7 @@
     "postcss.config.cjs",
     "tailwind.config.ts",
     "vite.config.ts",
-    "vitest.config.ts",
-    "env.d.ts"
+    "vitest.config.ts"
   ],
   "references": [{ "path": "./tsconfig.node.json" }]
 }
