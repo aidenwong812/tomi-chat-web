@@ -27,6 +27,7 @@ import {
   useConversation,
 } from "@xmtp/react-sdk";
 import { ContentTypeScreenEffect } from "@xmtp/experimental-content-type-screen-effect";
+import { useWalletClient } from "wagmi";
 import { IconButton } from "../IconButton/IconButton";
 import { useAttachmentChange } from "../../../hooks/useAttachmentChange";
 import { typeLookup, type contentTypes } from "../../../helpers/attachments";
@@ -38,6 +39,7 @@ import { useRecordingTimer } from "../../../hooks/useRecordingTimer";
 import "react-tooltip/dist/react-tooltip.css";
 import { useLongPress } from "../../../hooks/useLongPress";
 import { EffectDialog } from "../EffectDialog/EffectDialog";
+import { conversationsService } from "../../../../services/conversations";
 
 type InputProps = {
   /**
@@ -80,6 +82,7 @@ type InputProps = {
    * Function to set whether content is being dragged over the draggable area, including the message input
    */
   setIsDragActive: (status: boolean) => void;
+  selectedRoomMembers: string[];
 };
 
 export const MessageInput = ({
@@ -93,6 +96,7 @@ export const MessageInput = ({
   attachmentPreview,
   setAttachmentPreview,
   setIsDragActive,
+  selectedRoomMembers,
 }: InputProps) => {
   const { getCachedByPeerAddress } = useConversation();
   // For effects
@@ -187,10 +191,56 @@ export const MessageInput = ({
     status,
   });
 
+  const { data: walletClient } = useWalletClient();
+
   const send = useCallback(async () => {
     // the peerAddress check is for the type checker only
     // it's not possible to send a message without a valid peerAddress
-    if (peerAddress && (value || attachment)) {
+    if (selectedRoomMembers.length > 2 && (value || attachment)) {
+      // save reference to these values before clearing them from state
+      const val = value;
+      const attach = attachment;
+
+      setValue("");
+      setAttachment(undefined);
+      setAttachmentPreview(undefined);
+
+      await Promise.all(
+        selectedRoomMembers.map(async (member) => {
+          let convo: CachedConversation | undefined;
+          if (member !== walletClient?.account.address) {
+            const existing = await getCachedByPeerAddress(member);
+            if (existing) {
+              convo = existing;
+            } else {
+              const { cachedConversation } = await startConversation(
+                member,
+                undefined,
+              );
+              convo = cachedConversation;
+            }
+            if (convo && conversationTopic !== convo.topic) {
+              setConversationTopic(convo.topic);
+            }
+          }
+          if (attach && convo) {
+            await sendMessage(convo, attach, "attachment");
+          }
+          if (val && convo) {
+            await sendMessage(convo, val, "text");
+          }
+        }),
+      );
+      const messageId = localStorage.getItem("messageId") ?? "";
+      const groupId = localStorage.getItem("groupId") ?? "";
+      await conversationsService.saveConversation({
+        group_id: groupId,
+        message_id: messageId,
+        sender: walletClient?.account.address ?? "",
+      });
+      // focus on message input after sending
+      textAreaRef.current?.focus();
+    } else if (peerAddress && (value || attachment)) {
       // save reference to these values before clearing them from state
       const val = value;
       const attach = attachment;
@@ -238,7 +288,9 @@ export const MessageInput = ({
     setAttachmentPreview,
     setConversationTopic,
     startConversation,
+    selectedRoomMembers,
     value,
+    walletClient?.account.address,
   ]);
 
   const handleLongPress = () => {

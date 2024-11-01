@@ -53,5 +53,7 @@ interface ImportMeta {
     VITE_PROJECT_ID: string;
     VITE_KEY: string;
     VITE_PROOF: string;
+    VITE_SUPABASE_URL: string;
+    VITE_SUPABASE_ANON_KEY: string;
   };
 }

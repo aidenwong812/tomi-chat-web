@@ -76,7 +76,7 @@ const useSendMessage = (
           void _sendMessage(
             conversation,
             {
-              reference: activeMessage.xmtpID,
+              reference: String(activeMessage.xmtpID),
               content: remoteAttachment,
               contentType: ContentTypeRemoteAttachment,
             } satisfies Reply,
@@ -91,17 +91,19 @@ const useSendMessage = (
         }
       } else if (type === "text") {
         if (activeMessage?.xmtpID) {
-          void _sendMessage(
+          const messageId = await _sendMessage(
             conversation,
             {
-              reference: activeMessage?.xmtpID,
+              reference: String(activeMessage.xmtpID),
               content: message,
               contentType: ContentTypeText,
             } satisfies Reply,
             ContentTypeReply,
           );
+          if (messageId) localStorage.setItem("messageId", messageId.id);
         } else {
-          void _sendMessage(conversation, message);
+          const messageId = await _sendMessage(conversation, message);
+          if (messageId) localStorage.setItem("messageId", messageId.id);
         }
       }
     },

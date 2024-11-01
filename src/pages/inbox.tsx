@@ -22,7 +22,7 @@ import { ConversationListController } from "../controllers/ConversationListContr
 import { useAttachmentChange } from "../hooks/useAttachmentChange";
 import useSelectedConversation from "../hooks/useSelectedConversation";
 import { ReplyThread } from "../component-library/components/ReplyThread/ReplyThread";
-// import { Mobile } from "../component-library/components/Mobile/Mobile";
+import GroupConversationController from "../controllers/GroupConversationController";
 
 const Inbox: React.FC<{ children?: React.ReactNode }> = () => {
   const navigate = useNavigate();
@@ -65,8 +65,8 @@ const Inbox: React.FC<{ children?: React.ReactNode }> = () => {
 
   const { disconnect: disconnectWagmi, reset: resetWagmi } = useDisconnect();
   const [isConversationListOpen, setIsConversationListOpen] = useState(false);
-
-  const [isCreateChatRoom, setIsCreateChatRoom] = useState(false);
+  const [selectedRoom, setSelectedRoom] = useState<string | null>("");
+  const [selectedRoomMembers, setSelectedRoomMembers] = useState<string[]>([]);
 
   const [attachmentPreview, setAttachmentPreview]: [
     string | undefined,
@@ -77,6 +77,8 @@ const Inbox: React.FC<{ children?: React.ReactNode }> = () => {
     Attachment | undefined,
     (attachment: Attachment | undefined) => void,
   ] = useState();
+
+  const [selectedSideNav, setSelectedSideNav] = useState<string>("Chats");
 
   const { onAttachmentChange } = useAttachmentChange({
     setAttachment,
@@ -137,27 +139,52 @@ const Inbox: React.FC<{ children?: React.ReactNode }> = () => {
         <div
           className={`${isConversationListOpen ? "flex" : "hidden"} md:flex flex-1 md:flex-[4]`}>
           <div className="xl:flex flex-[1] hidden w-[320px]">
-            <SideNavController />
+            <SideNavController
+              selectedSideNav={selectedSideNav}
+              setSelectedSideNav={setSelectedSideNav}
+            />
           </div>
           <div className="flex flex-[2] flex-col w-full h-screen overflow-y-auto md:min-w-[350px] bg-white dark:bg-black gap-4 border-x border-[#a2a2a2] dark:border-[#141415]">
-            <HeaderDropdownController />
-            <div className="flex justify-center">
-              <button
-                type="button"
-                className="rounded-full dark:bg-[#111111] hover:bg-[#FF0083] hover:text-white dark:hover:bg-[#FF0083] 
-                  dark:hover:text-white duration-300 bg-white text-black border border-[#FF0083] dark:text-white p-2 w-1/2"
-                onClick={() => {
-                  setIsCreateChatRoom(!isCreateChatRoom);
-                }}>
-                Create Chat Room
-              </button>
-            </div>
+            {selectedSideNav === "Chats" && <HeaderDropdownController />}
             <ConversationListController
               setStartedFirstMessage={setStartedFirstMessage}
+              selectedRoom={selectedRoom}
+              selectedSideNav={selectedSideNav}
+              setSelectedRoom={setSelectedRoom}
+              setSelectedRoomMembers={setSelectedRoomMembers}
+              selectedRoomMembers={selectedRoomMembers}
             />
           </div>
         </div>
-        {
+        {selectedSideNav === "Rooms" ? (
+          <div
+            className={`${!isConversationListOpen ? "flex" : "hidden"} flex-1 md:flex-[6] w-full flex-col h-screen overflow-hidden`}>
+            <div className="flex justify-center font-bold text-xl border border-[#FF0083] p-4 rounded-b-3xl">
+              {selectedRoom ? <h1>Chat Room Id: {selectedRoom}</h1> : null}
+            </div>
+            <div className="h-full overflow-auto flex flex-col">
+              {selectedRoomMembers.length > 2 && (
+                <GroupConversationController groupId={selectedRoom!} />
+              )}
+            </div>
+            <button
+              type="button"
+              className="flex md:hidden"
+              onClick={() => setIsConversationListOpen(true)}>
+              <FiArrowLeft className="size-10 m-4 rounded-full p-2 dark:bg-[#141414] dark:border-black dark:text-white bg-white text-[#FF0083] border border-[#FF0083]" />
+            </button>
+            {activeTab === "messages" ? (
+              <MessageInputController
+                attachment={attachment}
+                setAttachment={setAttachment}
+                attachmentPreview={attachmentPreview}
+                setAttachmentPreview={setAttachmentPreview}
+                setIsDragActive={setIsDragActive}
+                selectedRoomMembers={selectedRoomMembers}
+              />
+            ) : null}
+          </div>
+        ) : (
           <div
             className={`${!isConversationListOpen ? "flex" : "hidden"} flex-1 md:flex-[6] w-full flex-col h-screen overflow-hidden`}>
             {!conversations.length &&
@@ -209,13 +236,14 @@ const Inbox: React.FC<{ children?: React.ReactNode }> = () => {
                       attachmentPreview={attachmentPreview}
                       setAttachmentPreview={setAttachmentPreview}
                       setIsDragActive={setIsDragActive}
+                      selectedRoomMembers={selectedRoomMembers}
                     />
                   ) : null}
                 </div>
               </div>
             )}
           </div>
-        }
+        )}
       </div>
     </div>
   );

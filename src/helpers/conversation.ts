@@ -141,6 +141,15 @@ export const updateConversationIdentity = async (
   }
 };
 
+// export const updateRoomConversationIdentities = async (
+//   conversations: CachedConversation[],
+//   selectedRoomMembers: string[],
+//   db: Dexie,
+// ) => {
+//   console.log("updateRoomConversationIdentities", conversations, selectedRoomMembers);
+//   console.log(db);
+// }
+
 /**
  * Given an array of conversations, lookup and update the identities of the
  * conversation peer addresses.

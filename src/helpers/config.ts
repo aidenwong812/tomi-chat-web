@@ -12,7 +12,7 @@ import { isAppEnvDemo } from "./env";
 
 // Required field as of WalletConnect v2.
 // Replace with your project id: https://www.rainbowkit.com/docs/migration-guide#2-supply-a-walletconnect-cloud-projectid
-const projectId = import.meta.env.VITE_PROJECT_ID || "ADD_PROJECT_ID_HERE";
+const projectId = import.meta.env.VITE_PROJECT_ID!;
 const appName = "XMTP Inbox Web";
 
 const { wallets } = getDefaultWallets({
@@ -41,11 +41,11 @@ const transports = {
     ),
     http(),
   ]),
-};
+} as const;
 
-let config: Config;
+let config: Config | undefined;
 
-export const getWagmiConfig = () => {
+export const getWagmiConfig = (): Config => {
   if (!config) {
     if (isAppEnvDemo()) {
       config = createConfig({
