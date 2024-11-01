@@ -10,8 +10,6 @@ export const groupsService = {
   async create(group: Omit<Group, "id" | "created" | "updated">) {
     const validatedGroup = GroupSchema.omit({
       id: true,
-      created: true,
-      updated: true,
     }).parse(group);
 
     const { data, error } = (await supabase

@@ -8,8 +8,6 @@ export const conversationsService = {
   ) {
     const validatedConversation = ConversationSchema.omit({
       id: true,
-      created: true,
-      updated: true,
     }).parse(conversation);
 
     const { data, error } = (await supabase
