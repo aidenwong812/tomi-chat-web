@@ -60,7 +60,7 @@ export const OnboardingStep = ({
       <div className="flex flex-col justify-between items-center text-center m-auto w-full p-4 h-full">
         <div className="flex justify-center items-center h-[20vh]">
           <img
-            src={logo}
+            src={logo as string}
             alt="XMTP Logo"
             className="w-[180px] absolute sm:left-[15%] top-[7vh]"
           />
@@ -79,7 +79,11 @@ export const OnboardingStep = ({
         <div className="h-[60vh] w-full flex flex-col justify-between items-center">
           <div className="max-w-[752px] min-w-[330px] h-[300px] bg-[#FF0083] bg-opacity-15 border-[#ff008326] border-2 rounded-[40PX] p-4 px-8 z-20 flex flex-col justify-between items-center mx-4 ">
             <img
-              src={theme === "light" ? logoMesh_dark : logoMesh_light}
+              src={
+                theme === "light"
+                  ? (logoMesh_dark as string)
+                  : (logoMesh_light as string)
+              }
               alt="XMTP Logo Mesh"
               className="h-[24%]"
             />

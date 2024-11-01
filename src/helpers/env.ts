@@ -22,7 +22,5 @@ export const isAppEnvDemo = (): boolean =>
 export const isAppEnvAlpha = (): boolean =>
   window.location.hostname.includes("alpha");
 
-export const getGoogleTagId = (): string => {
-  const tagId = import.meta.env.VITE_GOOGLE_TAG_ID! as string;
-  return tagId;
-};
+export const getGoogleTagId = (): string =>
+  import.meta.env.VITE_GOOGLE_TAG_ID ?? "";

@@ -65,7 +65,7 @@ const OnboardingPage = () => {
     <div className="h-screen w-full overflow-auto">
       {/* console.log("Current theme:", theme.theme); */}
       <img
-        src={theme === "light" ? lightBg : darkBg}
+        src={theme === "light" ? (lightBg as string) : (darkBg as string)}
         alt="Background"
         className="bg-cover w-full h-full -z-40 absolute"
       />
