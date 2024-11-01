@@ -60,7 +60,6 @@
     "interweave-emoji": "^7.0.0",
     "ipfs-http-client": "^60.0.1",
     "lodash": "^4.17.21",
-    "next": "^15.0.2",
     "next-themes": "^0.3.0",
     "react": "18.2.0",
     "react-blockies": "^1.4.1",
