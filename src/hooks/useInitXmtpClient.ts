@@ -53,7 +53,7 @@ const makePromise = <T = void>() => {
 
 // XMTP client options
 const clientOptions = {
-  apiUrl: import.meta.env.VITE_XMTP_API_URL!,
+  apiUrl: import.meta.env.VITE_XMTP_API_URL! as string,
   env: getEnv(),
   appVersion: getAppVersion(),
 } as Partial<ClientOptions>;

@@ -35,8 +35,8 @@ const AppController: React.FC = () => {
     production users. */
     if (window.location.hostname.includes(ENVIRONMENT.ALPHA)) {
       datadogRum.init({
-        applicationId: import.meta.env.VITE_DATA_DOG_ID!,
-        clientToken: import.meta.env.VITE_DATA_DOG_TOKEN!,
+        applicationId: import.meta.env.VITE_DATA_DOG_ID! as string,
+        clientToken: import.meta.env.VITE_DATA_DOG_TOKEN! as string,
         site: "datadoghq.com",
         service: "inbox-web",
         env: "prod",

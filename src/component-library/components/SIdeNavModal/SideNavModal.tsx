@@ -1,6 +1,5 @@
-import { SideNavController } from "../../../controllers/SideNavController";
-
 import type { Dispatch, SetStateAction } from "react";
+import { SideNavController } from "../../../controllers/SideNavController";
 
 const SideNavModal = ({
   selectedSideNav,

@@ -1,5 +1,6 @@
 import { useTranslation } from "react-i18next";
-import { SetStateAction, Dispatch, useState } from "react";
+import type { SetStateAction, Dispatch } from "react";
+import { useState } from "react";
 import { classNames } from "../../../helpers";
 import { IconButton } from "../IconButton/IconButton";
 import type { ActiveTab } from "../../../store/xmtp";

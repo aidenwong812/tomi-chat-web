@@ -38,10 +38,10 @@ const useSendMessage = (
         return;
       }
       if (attachment && type === "attachment") {
-        const principal = Signer.parse(import.meta.env.VITE_KEY);
+        const principal = Signer.parse(import.meta.env.VITE_KEY as string);
         const client = await Client.create({ principal });
 
-        const proof = await parseProof(import.meta.env.VITE_PROOF);
+        const proof = await parseProof(import.meta.env.VITE_PROOF as string);
         const space = await client.addSpace(proof);
 
         await client.setCurrentSpace(space.did());
