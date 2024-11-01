@@ -200,7 +200,7 @@ const SideNav = ({
                     className="dark:fill-white fill-black size-10 -mt-2"
                   />
                   <div className="w-full">
-                    {`${isOn ? "Light" : "Night"}mode`}
+                    {`${isOn ? "Light" : "Night"} Mode`}
                   </div>
                   <div>
                     <ToggleButton
