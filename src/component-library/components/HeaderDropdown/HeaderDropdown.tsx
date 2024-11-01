@@ -1,5 +1,5 @@
 import { useTranslation } from "react-i18next";
-import { useState } from "react";
+import { SetStateAction, Dispatch, useState } from "react";
 import { classNames } from "../../../helpers";
 import { IconButton } from "../IconButton/IconButton";
 import type { ActiveTab } from "../../../store/xmtp";
@@ -16,9 +16,13 @@ interface HeaderDropdownProps {
    * What is the recipient input?
    */
   recipientInput: string;
+  selectedSideNav: string;
+  setSelectedSideNav: Dispatch<SetStateAction<string>>;
 }
 
 export const HeaderDropdown = ({
+  selectedSideNav,
+  setSelectedSideNav,
   onClick,
   recipientInput,
 }: HeaderDropdownProps) => {
@@ -52,7 +56,13 @@ export const HeaderDropdown = ({
           }}>
           <img src="/tomi.svg" alt="tomi" className="size-6 xl:hidden fle" />
         </button>
-        {isModalOpen && <SideNavModal setIsModalOpen={setIsModalOpen} />}
+        {isModalOpen && (
+          <SideNavModal
+            selectedSideNav={selectedSideNav}
+            setSelectedSideNav={setSelectedSideNav}
+            setIsModalOpen={setIsModalOpen}
+          />
+        )}
         {tabs.map(({ name, testId }) => (
           <button
             key={name}

@@ -65,7 +65,7 @@ const Inbox: React.FC<{ children?: React.ReactNode }> = () => {
 
   const { disconnect: disconnectWagmi, reset: resetWagmi } = useDisconnect();
   const [isConversationListOpen, setIsConversationListOpen] = useState(false);
-  const [selectedRoom, setSelectedRoom] = useState<string | null>("");
+  const [selectedRoom, setSelectedRoom] = useState<string>("");
   const [selectedRoomMembers, setSelectedRoomMembers] = useState<string[]>([]);
 
   const [attachmentPreview, setAttachmentPreview]: [
@@ -104,7 +104,7 @@ const Inbox: React.FC<{ children?: React.ReactNode }> = () => {
         resetWagmi();
       }
     };
-    void checkSigners();
+    checkSigners();
   }, [
     disconnect,
     resetXmtpState,
@@ -145,14 +145,18 @@ const Inbox: React.FC<{ children?: React.ReactNode }> = () => {
             />
           </div>
           <div className="flex flex-[2] flex-col w-full h-screen overflow-y-auto md:min-w-[350px] bg-white dark:bg-black gap-4 border-x border-[#a2a2a2] dark:border-[#141415]">
-            {selectedSideNav === "Chats" && <HeaderDropdownController />}
+            {selectedSideNav === "Chats" && (
+              <HeaderDropdownController
+                selectedSideNav={selectedSideNav}
+                setSelectedSideNav={setSelectedSideNav}
+              />
+            )}
             <ConversationListController
               setStartedFirstMessage={setStartedFirstMessage}
-              selectedRoom={selectedRoom}
+              selectedRoom={selectedRoom ?? ""}
               selectedSideNav={selectedSideNav}
               setSelectedRoom={setSelectedRoom}
               setSelectedRoomMembers={setSelectedRoomMembers}
-              selectedRoomMembers={selectedRoomMembers}
             />
           </div>
         </div>
@@ -164,7 +168,7 @@ const Inbox: React.FC<{ children?: React.ReactNode }> = () => {
             </div>
             <div className="h-full overflow-auto flex flex-col">
               {selectedRoomMembers.length > 2 && (
-                <GroupConversationController groupId={selectedRoom!} />
+                <GroupConversationController groupId={selectedRoom} />
               )}
             </div>
             <button

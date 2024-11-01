@@ -1,7 +1,15 @@
 import { HeaderDropdown } from "../component-library/components/HeaderDropdown/HeaderDropdown";
 import { useXmtpStore } from "../store/xmtp";
 
-export const HeaderDropdownController = () => {
+interface HeaderDropdownControllerProps {
+  selectedSideNav: string;
+  setSelectedSideNav: React.Dispatch<React.SetStateAction<string>>;
+}
+
+export const HeaderDropdownController = ({
+  selectedSideNav,
+  setSelectedSideNav,
+}: HeaderDropdownControllerProps) => {
   const resetRecipient = useXmtpStore((s) => s.resetRecipient);
   const setConversationTopic = useXmtpStore((s) => s.setConversationTopic);
   const recipientInput = useXmtpStore((s) => s.recipientInput);
@@ -10,6 +18,8 @@ export const HeaderDropdownController = () => {
   return (
     <HeaderDropdown
       recipientInput={recipientInput}
+      selectedSideNav={selectedSideNav}
+      setSelectedSideNav={setSelectedSideNav}
       onClick={() => {
         resetRecipient();
         setConversationTopic();
