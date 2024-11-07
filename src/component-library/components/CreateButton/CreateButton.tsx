@@ -5,13 +5,13 @@ const CreateButton = ({
   isCreateChatRoom: boolean;
   setIsCreateChatRoom: (isCreateChatRoom: boolean) => void;
 }) => (
-  <div className="flex justify-end px-4">
+  <div className="flex justify-end px-4 mt-4">
     <button
       type="button"
       className="rounded-full dark:bg-[#111111] hover:bg-[#FF0083] hover:text-white dark:hover:bg-[#FF0083] 
-      dark:hover:text-white duration-300 bg-white text-black border border-[#FF0083] dark:text-white p-2 min-w-[100px]"
+      dark:hover:text-white duration-300 bg-white text-black border border-[#FF0083] dark:text-white p-1 min-w-[100px]"
       onClick={() => setIsCreateChatRoom(!isCreateChatRoom)}>
-      {isCreateChatRoom ? "Complete" : "Create"}
+      Create
     </button>
   </div>
 );

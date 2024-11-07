@@ -11,6 +11,8 @@ export type RecipientAddress = ETHAddress | null;
 interface XmtpState {
   loadingConversations: boolean;
   setLoadingConversations: (loadingConversations: boolean) => void;
+  selectedSideNav: string;
+  setSelectedSideNav: (selectedSideNav: string) => void;
   clientName: string | null;
   setClientName: (name: string | null) => void;
   clientAvatar: string | null;
@@ -61,6 +63,9 @@ export const useXmtpStore = create<XmtpState>((set) => ({
   loadingConversations: true,
   setLoadingConversations: (loadingConversations: boolean) =>
     set(() => ({ loadingConversations })),
+  selectedSideNav: "Chats",
+  setSelectedSideNav: (selectedSideNav: string) =>
+    set(() => ({ selectedSideNav })),
   clientName: null,
   setClientName: (name) => set(() => ({ clientName: name })),
   clientAvatar: null,
@@ -86,6 +91,7 @@ export const useXmtpStore = create<XmtpState>((set) => ({
   resetXmtpState: () =>
     set(() => ({
       client: undefined,
+      selectedSideNav: "",
       recipientInput: "",
       recipientAddress: null,
       recipientName: null,

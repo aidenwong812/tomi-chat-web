@@ -227,3 +227,7 @@ export const shortAddress = (address: string): string =>
   isValidLongWalletAddress(address)
     ? `${address.substring(0, 6)}...${address.substring(address.length - 4)}`
     : address;
+export const shortId = (id: string): string =>
+  id.length > 10
+    ? `${id.substring(0, 6)}...${id.substring(id.length - 4)}`
+    : id;

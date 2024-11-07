@@ -29,4 +29,13 @@ export const conversationsService = {
     if (error) throw new Error(String(error));
     return data;
   },
+
+  async deleteConversation(group_id: string) {
+    const { error } = (await supabase
+      .from("conversations")
+      .delete()
+      .eq("group_id", group_id)) as { error: unknown };
+
+    if (error) throw new Error(String(error));
+  },
 };

@@ -86,7 +86,7 @@ const GroupConversationController = ({ groupId }: { groupId: string }) => {
                 : incomingMessageBackgroundStyles,
             )}>
             <div className="text-black dark:text-white text-left">
-              {msg.content.content}
+              {msg.contentFallback}
             </div>
             {t("{{datetime, time}}", { datetime: msg.sentAt })}
           </div>
