@@ -1,13 +1,8 @@
-import type { Dispatch, SetStateAction } from "react";
 import { SideNavController } from "../../../controllers/SideNavController";
 
 const SideNavModal = ({
-  selectedSideNav,
-  setSelectedSideNav,
   setIsModalOpen,
 }: {
-  selectedSideNav: string;
-  setSelectedSideNav: Dispatch<SetStateAction<string>>;
   setIsModalOpen: (isModalOpen: boolean) => void;
 }) => (
   <>
@@ -20,10 +15,7 @@ const SideNavModal = ({
       aria-label="Close side navigation"
     />
     <div className="fixed top-0 left-0 w-[320px] h-screen overflow-x-auto z-50 bg-white dark:bg-black">
-      <SideNavController
-        selectedSideNav={selectedSideNav}
-        setSelectedSideNav={setSelectedSideNav}
-      />
+      <SideNavController />
     </div>
   </>
 );

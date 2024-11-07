@@ -1,5 +1,4 @@
 import { useTranslation } from "react-i18next";
-import type { SetStateAction, Dispatch } from "react";
 import { useState } from "react";
 import { classNames } from "../../../helpers";
 import { IconButton } from "../IconButton/IconButton";
@@ -17,13 +16,9 @@ interface HeaderDropdownProps {
    * What is the recipient input?
    */
   recipientInput: string;
-  selectedSideNav: string;
-  setSelectedSideNav: Dispatch<SetStateAction<string>>;
 }
 
 export const HeaderDropdown = ({
-  selectedSideNav,
-  setSelectedSideNav,
   onClick,
   recipientInput,
 }: HeaderDropdownProps) => {
@@ -55,15 +50,9 @@ export const HeaderDropdown = ({
           onClick={() => {
             setIsModalOpen(true);
           }}>
-          <img src="/tomi.svg" alt="tomi" className="size-6 xl:hidden fle" />
+          <img src="/tomi.svg" alt="tomi" className="size-6 xl:hidden flex" />
         </button>
-        {isModalOpen && (
-          <SideNavModal
-            selectedSideNav={selectedSideNav}
-            setSelectedSideNav={setSelectedSideNav}
-            setIsModalOpen={setIsModalOpen}
-          />
-        )}
+        {isModalOpen && <SideNavModal setIsModalOpen={setIsModalOpen} />}
         {tabs.map(({ name, testId }) => (
           <button
             key={name}

@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useTheme } from "next-themes";
-import type { Dispatch, SetStateAction } from "react";
 import {
   RiMessage3Fill,
   RiContactsBook2Fill,
@@ -14,6 +13,7 @@ import { classNames, shortAddress } from "../../../helpers";
 import { AvatarSideNav } from "../Avatar/Avatar";
 import { GhostButton } from "../GhostButton/GhostButton";
 import { ToggleButton } from "../ToggleButton/ToggleButton";
+import { useXmtpStore } from "../../../store/xmtp";
 
 interface SideNavProps {
   /**
@@ -36,8 +36,6 @@ interface SideNavProps {
    * What should happen when disconnect is clicked?
    */
   onDisconnect?: () => void;
-  selectedSideNav: string;
-  setSelectedSideNav: Dispatch<SetStateAction<string>>;
 }
 
 // type Lang = {
@@ -51,27 +49,9 @@ const SideNav = ({
   walletAddress,
   avatarUrl,
   onDisconnect,
-  selectedSideNav,
-  setSelectedSideNav,
 }: SideNavProps) => {
-  // const [mappedLangs, setMappedLangs] = useState<Lang[]>([]);
-  // When language changes, change the modal text to render the corresponding locale selector within that language
-  // useEffect(() => {
-  //   const langs = supportedLocales.map((locale: string) => {
-  //     const lang = locale?.split("-")?.[0] || "en";
-  //     const languageNames = new Intl.DisplayNames([i18next.language], {
-  //       type: "language",
-  //     });
-
-  //     return {
-  //       displayText: languageNames.of(lang),
-  //       isSelected: i18next.language === lang,
-  //       lang,
-  //     };
-  //   });
-  //   setMappedLangs(langs);
-  // }, []);
-
+  const selectedSideNav = useXmtpStore((s) => s.selectedSideNav);
+  const setSelectedSideNav = useXmtpStore((s) => s.setSelectedSideNav);
   const { t } = useTranslation();
 
   const { theme, setTheme } = useTheme();

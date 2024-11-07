@@ -26,7 +26,7 @@ export const groupsService = {
     const { data, error } = (await supabase
       .from("groups")
       .delete()
-      .eq("id", id)) as SupabaseResponse<Group>;
+      .eq("group_id", id)) as SupabaseResponse<Group>;
 
     if (error) throw new Error(String(error));
     return data as Group;
@@ -38,7 +38,7 @@ export const groupsService = {
     const { data, error } = (await supabase
       .from("groups")
       .update({ ...validatedGroup, updated: new Date().toISOString() })
-      .eq("id", id)
+      .eq("group_id", id)
       .select()
       .single()) as SupabaseResponse<Group>;
 
@@ -50,7 +50,7 @@ export const groupsService = {
     const { data, error } = (await supabase
       .from("groups")
       .select("*")
-      .eq("id", id)
+      .eq("group_id", id)
       .single()) as SupabaseResponse<Group>;
 
     if (error) throw new Error(String(error));

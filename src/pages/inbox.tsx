@@ -78,7 +78,7 @@ const Inbox: React.FC<{ children?: React.ReactNode }> = () => {
     (attachment: Attachment | undefined) => void,
   ] = useState();
 
-  const [selectedSideNav, setSelectedSideNav] = useState<string>("Chats");
+  const selectedSideNav = useXmtpStore((s) => s.selectedSideNav);
 
   const { onAttachmentChange } = useAttachmentChange({
     setAttachment,
@@ -139,22 +139,13 @@ const Inbox: React.FC<{ children?: React.ReactNode }> = () => {
         <div
           className={`${isConversationListOpen ? "flex" : "hidden"} md:flex flex-1 md:flex-[4]`}>
           <div className="xl:flex flex-[1] hidden w-[320px]">
-            <SideNavController
-              selectedSideNav={selectedSideNav}
-              setSelectedSideNav={setSelectedSideNav}
-            />
+            <SideNavController />
           </div>
           <div className="flex flex-[2] flex-col w-full h-screen overflow-y-auto md:min-w-[350px] bg-white dark:bg-black gap-4 border-x border-[#a2a2a2] dark:border-[#141415]">
-            {selectedSideNav === "Chats" && (
-              <HeaderDropdownController
-                selectedSideNav={selectedSideNav}
-                setSelectedSideNav={setSelectedSideNav}
-              />
-            )}
+            {selectedSideNav === "Chats" && <HeaderDropdownController />}
             <ConversationListController
               setStartedFirstMessage={setStartedFirstMessage}
               selectedRoom={selectedRoom ?? ""}
-              selectedSideNav={selectedSideNav}
               setSelectedRoom={setSelectedRoom}
               setSelectedRoomMembers={setSelectedRoomMembers}
             />
