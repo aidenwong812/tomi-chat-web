@@ -62,12 +62,13 @@ const Inbox: React.FC<{ children?: React.ReactNode }> = () => {
   const setStartedFirstMessage = useXmtpStore(
     (state) => state.setStartedFirstMessage,
   );
+  const selectedRoom = useXmtpStore((state) => state.selectedRoom);
+  const selectedRoomMembers = useXmtpStore(
+    (state) => state.selectedRoomMembers,
+  );
 
   const { disconnect: disconnectWagmi, reset: resetWagmi } = useDisconnect();
   const [isConversationListOpen, setIsConversationListOpen] = useState(false);
-  const [selectedRoom, setSelectedRoom] = useState<string>("");
-  const [selectedRoomMembers, setSelectedRoomMembers] = useState<string[]>([]);
-
   const [attachmentPreview, setAttachmentPreview]: [
     string | undefined,
     (url: string | undefined) => void,
@@ -145,9 +146,6 @@ const Inbox: React.FC<{ children?: React.ReactNode }> = () => {
             {selectedSideNav === "Chats" && <HeaderDropdownController />}
             <ConversationListController
               setStartedFirstMessage={setStartedFirstMessage}
-              selectedRoom={selectedRoom ?? ""}
-              setSelectedRoom={setSelectedRoom}
-              setSelectedRoomMembers={setSelectedRoomMembers}
             />
           </div>
         </div>
@@ -159,7 +157,7 @@ const Inbox: React.FC<{ children?: React.ReactNode }> = () => {
             </div>
             <div className="h-full overflow-auto flex flex-col">
               {selectedRoomMembers.length > 2 && (
-                <GroupConversationController groupId={selectedRoom} />
+                <GroupConversationController />
               )}
             </div>
             <button
@@ -175,7 +173,6 @@ const Inbox: React.FC<{ children?: React.ReactNode }> = () => {
                 attachmentPreview={attachmentPreview}
                 setAttachmentPreview={setAttachmentPreview}
                 setIsDragActive={setIsDragActive}
-                selectedRoomMembers={selectedRoomMembers}
               />
             ) : null}
           </div>
@@ -231,7 +228,6 @@ const Inbox: React.FC<{ children?: React.ReactNode }> = () => {
                       attachmentPreview={attachmentPreview}
                       setAttachmentPreview={setAttachmentPreview}
                       setIsDragActive={setIsDragActive}
-                      selectedRoomMembers={selectedRoomMembers}
                     />
                   ) : null}
                 </div>

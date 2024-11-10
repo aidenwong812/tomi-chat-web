@@ -27,6 +27,7 @@ const useSendMessage = (
 ) => {
   const { sendMessage: _sendMessage, isLoading, error } = _useSendMessage();
   const recipientOnNetwork = useXmtpStore((s) => s.recipientOnNetwork);
+  const selectedSideNav = useXmtpStore((s) => s.selectedSideNav);
 
   const sendMessage = useCallback(
     async (
@@ -34,7 +35,7 @@ const useSendMessage = (
       message: string | Attachment,
       type: "text" | "attachment",
     ) => {
-      if (!recipientOnNetwork) {
+      if (!recipientOnNetwork && selectedSideNav !== "Rooms") {
         return;
       }
       if (attachment && type === "attachment") {
@@ -107,7 +108,13 @@ const useSendMessage = (
         }
       }
     },
-    [recipientOnNetwork, attachment, _sendMessage, activeMessage],
+    [
+      recipientOnNetwork,
+      attachment,
+      _sendMessage,
+      activeMessage,
+      selectedSideNav,
+    ],
   );
 
   return {
