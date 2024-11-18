@@ -108,39 +108,46 @@ export const FullMessageController = ({
 
   const showFrame = isValidFrame(frameMetadata);
 
-  return (
-    <div
-      className={classNames(
-        "flex flex-col w-full px-4 md:px-8",
-        alignmentStyles,
-      )}>
-      <FullMessage
-        isReply={isReply}
-        message={message}
-        conversation={conversation}
-        key={message.xmtpID}
-        from={{
-          displayAddress: recipientName ?? shortAddress(message.senderAddress),
-          isSelf: client?.address === message.senderAddress,
-        }}
-        datetime={message.sentAt}>
-        <MessageContentController
+  if (
+    typeof message.content === "string" &&
+    message.content.includes("tomi") &&
+    !message.content.includes("roomId")
+  )
+    return (
+      <div
+        className={classNames(
+          "flex flex-col w-full px-4 md:px-8",
+          alignmentStyles,
+        )}>
+        <FullMessage
+          isReply={isReply}
           message={message}
-          isSelf={client?.address === message.senderAddress}
-        />
-      </FullMessage>
-      {showFrame && (
-        <Frame
-          image={frameMetadata?.frameInfo?.image.content}
-          title={getFrameTitle(frameMetadata)}
-          buttons={frameMetadata?.frameInfo?.buttons}
-          handleClick={handleFrameButtonClick}
-          frameButtonUpdating={frameButtonUpdating}
-          interactionsEnabled={isXmtpFrame(frameMetadata)}
-          textInput={frameMetadata?.frameInfo?.textInput?.content}
-          onTextInputChange={setTextInputValue}
-        />
-      )}
-    </div>
-  );
+          conversation={conversation}
+          key={message.xmtpID}
+          from={{
+            displayAddress:
+              recipientName ?? shortAddress(message.senderAddress),
+            isSelf: client?.address === message.senderAddress,
+          }}
+          datetime={message.sentAt}>
+          <MessageContentController
+            message={message}
+            isSelf={client?.address === message.senderAddress}
+          />
+        </FullMessage>
+        {showFrame && (
+          <Frame
+            image={frameMetadata?.frameInfo?.image.content}
+            title={getFrameTitle(frameMetadata)}
+            buttons={frameMetadata?.frameInfo?.buttons}
+            handleClick={handleFrameButtonClick}
+            frameButtonUpdating={frameButtonUpdating}
+            interactionsEnabled={isXmtpFrame(frameMetadata)}
+            textInput={frameMetadata?.frameInfo?.textInput?.content}
+            onTextInputChange={setTextInputValue}
+          />
+        )}
+      </div>
+    );
+  return "";
 };

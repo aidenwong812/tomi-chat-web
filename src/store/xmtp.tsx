@@ -41,6 +41,12 @@ interface XmtpState {
   setActiveMessage: (message?: CachedMessageWithId) => void;
   activeTab: ActiveTab;
   setActiveTab: (activeTab: ActiveTab) => void;
+  isGroupChatUpdate: boolean;
+  setIsGroupChatUpdate: (isGroupChatUpdate: boolean) => void;
+  selectedRoom: string;
+  setSelectedRoom: (selectedRoom: string) => void;
+  selectedRoomMembers: string[];
+  setSelectedRoomMembers: (selectedRoomMembers: string[]) => void;
   chatRooms:
     | {
         group_id: string;
@@ -63,11 +69,19 @@ export const useXmtpStore = create<XmtpState>((set) => ({
   loadingConversations: true,
   setLoadingConversations: (loadingConversations: boolean) =>
     set(() => ({ loadingConversations })),
+  isGroupChatUpdate: true,
+  setIsGroupChatUpdate: (isGroupChatUpdate: boolean) =>
+    set(() => ({ isGroupChatUpdate })),
+  selectedRoomMembers: [],
+  setSelectedRoomMembers: (selectedRoomMembers) =>
+    set(() => ({ selectedRoomMembers })),
   selectedSideNav: "Chats",
   setSelectedSideNav: (selectedSideNav: string) =>
     set(() => ({ selectedSideNav })),
   clientName: null,
   setClientName: (name) => set(() => ({ clientName: name })),
+  selectedRoom: "",
+  setSelectedRoom: (selectedRoom) => set(() => ({ selectedRoom })),
   clientAvatar: null,
   setClientAvatar: (avatar) => set(() => ({ clientAvatar: avatar })),
   recipientInput: "",

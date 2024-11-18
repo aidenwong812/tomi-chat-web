@@ -13,10 +13,10 @@ import { groupsService } from "../../services/groups";
 import CreateButton from "../component-library/components/CreateButton/CreateButton";
 import { updateConversationIdentities } from "../helpers/conversation";
 import { shortId } from "../helpers";
-import { conversationsService } from "../../services/conversations";
 import CreateModal from "../component-library/components/CreateModal/CreateModal";
 import SideNavModal from "../component-library/components/SIdeNavModal/SideNavModal";
 import { Spinner } from "../component-library/components/Loaders/Spinner";
+import { conversationsService } from "../../services/conversations";
 
 interface ChatRoom {
   group_id: string;
@@ -25,16 +25,10 @@ interface ChatRoom {
 
 type ConversationListControllerProps = {
   setStartedFirstMessage: (startedFirstMessage: boolean) => void;
-  selectedRoom: string;
-  setSelectedRoom: (value: string) => void;
-  setSelectedRoomMembers: (value: string[]) => void;
 };
 
 export const ConversationListController = ({
   setStartedFirstMessage,
-  selectedRoom,
-  setSelectedRoom,
-  setSelectedRoomMembers,
 }: ConversationListControllerProps) => {
   const [activeConversations, setActiveConversations] = useState<
     CachedConversation[]
@@ -42,6 +36,9 @@ export const ConversationListController = ({
 
   const { data: walletClient } = useWalletClient();
   const selectedSideNav = useXmtpStore((s) => s.selectedSideNav);
+  const selectedRoom = useXmtpStore((s) => s.selectedRoom);
+  const setSelectedRoom = useXmtpStore((s) => s.setSelectedRoom);
+  const setSelectedRoomMembers = useXmtpStore((s) => s.setSelectedRoomMembers);
 
   const { isLoaded, isLoading, conversations } = useListConversations();
   const { isAllowed, isDenied, consentState } = useConsent();
@@ -143,10 +140,10 @@ export const ConversationListController = ({
     setSelectedRoomMembers(room.users);
   };
 
-  const handleDelete = async (groupId: string) => {
+  const handleDelete = async (room: ChatRoom) => {
     setIsLoadingGroups(true);
-    await groupsService.delete(groupId);
-    await conversationsService.deleteConversation(groupId);
+    await groupsService.delete(room.group_id);
+    await conversationsService.deleteConversation(room.group_id);
     void fetchGroups();
   };
 
@@ -226,7 +223,7 @@ export const ConversationListController = ({
                 <RiDeleteBin6Line
                   size={24}
                   onClick={() => {
-                    void handleDelete(room.group_id);
+                    void handleDelete(room);
                   }}
                 />
               </div>

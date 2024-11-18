@@ -141,7 +141,6 @@ export const FullMessage = ({
   const alignmentStyles = from.isSelf
     ? "items-end justify-end"
     : "items-start justify-start";
-
   return (
     <div
       data-testid="message-tile-container"
@@ -247,7 +246,8 @@ export const FullMessage = ({
                 onClick={() => {
                   void deleteReaction(reaction);
                 }}>
-                {reaction.content}
+                {reaction.content.includes("tomi") &&
+                  reaction.content.split(" ")[1]}
               </div>
             ))}
           </div>

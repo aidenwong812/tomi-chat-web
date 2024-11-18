@@ -82,7 +82,6 @@ type InputProps = {
    * Function to set whether content is being dragged over the draggable area, including the message input
    */
   setIsDragActive: (status: boolean) => void;
-  selectedRoomMembers: string[];
 };
 
 export const MessageInput = ({
@@ -96,9 +95,9 @@ export const MessageInput = ({
   attachmentPreview,
   setAttachmentPreview,
   setIsDragActive,
-  selectedRoomMembers,
 }: InputProps) => {
   const { getCachedByPeerAddress } = useConversation();
+  const roomId = useXmtpStore((s) => s.selectedRoom);
   // For effects
   const { sendMessage: _sendMessage } = _useSendMessage();
   const [openEffectDialog, setOpenEffectDialog] = useState(false);
@@ -114,8 +113,14 @@ export const MessageInput = ({
   const setConversationTopic = useXmtpStore(
     (state) => state.setConversationTopic,
   );
+  const selectedSideNav = useXmtpStore((state) => state.selectedSideNav);
   const conversationTopic = useXmtpStore((state) => state.conversationTopic);
-
+  const selectedRoomMembers = useXmtpStore(
+    (state) => state.selectedRoomMembers,
+  );
+  const setIsGroupChatUpdate = useXmtpStore(
+    (state) => state.setIsGroupChatUpdate,
+  );
   const inputFile = useRef<HTMLInputElement | null>(null);
 
   const onChange = (event: ChangeEvent<HTMLTextAreaElement>) =>
@@ -194,71 +199,35 @@ export const MessageInput = ({
   const { data: walletClient } = useWalletClient();
 
   const send = useCallback(async () => {
-    // the peerAddress check is for the type checker only
-    // it's not possible to send a message without a valid peerAddress
-    if (selectedRoomMembers.length > 2 && (value || attachment)) {
+    let i = 0;
+    if (walletClient?.account.address === selectedRoomMembers[i]) {
+      i++;
+    }
+
+    const temppeerAddress =
+      selectedSideNav === "Rooms" ? selectedRoomMembers[i] : peerAddress;
+    if (temppeerAddress && (value || attachment)) {
       // save reference to these values before clearing them from state
       const val = value;
       const attach = attachment;
-
       setValue("");
       setAttachment(undefined);
       setAttachmentPreview(undefined);
 
-      await Promise.all(
-        selectedRoomMembers.map(async (member) => {
-          let convo: CachedConversation | undefined;
-          if (member !== walletClient?.account.address) {
-            const existing = await getCachedByPeerAddress(member);
-            if (existing) {
-              convo = existing;
-            } else {
-              const { cachedConversation } = await startConversation(
-                member,
-                undefined,
-              );
-              convo = cachedConversation;
-            }
-            if (convo && conversationTopic !== convo.topic) {
-              setConversationTopic(convo.topic);
-            }
-          }
-          if (attach && convo) {
-            await sendMessage(convo, attach, "attachment");
-          }
-          if (val && convo) {
-            await sendMessage(convo, val, "text");
-          }
-        }),
-      );
-      const messageId = localStorage.getItem("messageId") ?? "";
-      const groupId = localStorage.getItem("groupId") ?? "";
-      await conversationsService.saveConversation({
-        group_id: groupId,
-        message_id: messageId,
-        sender: walletClient?.account.address ?? "",
-      });
-      // focus on message input after sending
-      textAreaRef.current?.focus();
-    } else if (peerAddress && (value || attachment)) {
-      // save reference to these values before clearing them from state
-      const val = value;
-      const attach = attachment;
-
-      setValue("");
-      setAttachment(undefined);
-      setAttachmentPreview(undefined);
-
-      let convo = conversation;
+      let convo: CachedConversation | undefined;
+      if (selectedSideNav === "Rooms") {
+        const conv = await getCachedByPeerAddress(temppeerAddress);
+        if (conv) convo = conv as CachedConversation;
+      } else convo = conversation;
       if (!convo) {
         // check for cached conversation with the same peer address
-        const existing = await getCachedByPeerAddress(peerAddress);
+        const existing = await getCachedByPeerAddress(temppeerAddress);
         if (existing) {
           convo = existing;
         } else {
           // create new conversation
           const { cachedConversation } = await startConversation(
-            peerAddress,
+            temppeerAddress,
             undefined,
           );
           convo = cachedConversation;
@@ -272,13 +241,27 @@ export const MessageInput = ({
         void sendMessage(convo, attach, "attachment");
       }
       if (val && convo) {
-        void sendMessage(convo, val, "text");
+        const sendVal =
+          selectedSideNav === "Rooms"
+            ? `tomi roomId ${roomId} ${val}`
+            : `tomi ${val}`;
+        void sendMessage(convo, sendVal, "text");
+        const messageId = localStorage.getItem("messageId") ?? "";
+        const groupId = localStorage.getItem("groupId") ?? "";
+        if (selectedSideNav === "Rooms") {
+          await conversationsService.saveConversation({
+            group_id: groupId,
+            message_id: messageId,
+            sender: walletClient?.account.address ?? "",
+          });
+        }
       }
       // focus on message input after sending
       textAreaRef.current?.focus();
     }
   }, [
     attachment,
+    selectedRoomMembers,
     conversation,
     conversationTopic,
     getCachedByPeerAddress,
@@ -288,9 +271,10 @@ export const MessageInput = ({
     setAttachmentPreview,
     setConversationTopic,
     startConversation,
-    selectedRoomMembers,
     value,
     walletClient?.account.address,
+    selectedSideNav,
+    roomId,
   ]);
 
   const handleLongPress = () => {
@@ -353,6 +337,7 @@ export const MessageInput = ({
                 onKeyDown={(e) => {
                   if (e.key === "Enter" && !e.shiftKey) {
                     e.preventDefault();
+                    setIsGroupChatUpdate(false);
                     void send();
                   }
                 }}

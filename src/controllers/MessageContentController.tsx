@@ -29,7 +29,10 @@ const MessageContentController = ({
   const contentType = ContentTypeId.fromString(message.contentType);
 
   if (contentType.sameAs(ContentTypeText)) {
-    const content = message.content as string;
+    const tempContent = message.content as string;
+    const content = tempContent.includes("tomi")
+      ? tempContent.replace("tomi ", "")
+      : null;
     return (
       <span className="interweave-content" data-testid="message-tile-text">
         <Interweave
